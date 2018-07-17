@@ -4,6 +4,8 @@ class PlayByPlayReader():
 
 	def __init__(self):
 		self.file = open(play_by_play_filename, "r")
+		#sets up the dictionary keys for line reading
+		#utilizing the first line in the file
 		self.dictionary_keys = []
 		first_line = self.file.readline()
 		for keyword in first_line.split():
@@ -12,6 +14,10 @@ class PlayByPlayReader():
 		self.from_last_run_event = self._build_dict(self.file.readline())
 
 	def get_next_game(self):
+		'''
+		Returns every event from the entire next game
+		from the file. Returns False if none remain
+		'''
 		if self.from_last_run_event is None:
 			return False
 		game_id = self.from_last_run_event["Game_id"]
@@ -26,6 +32,11 @@ class PlayByPlayReader():
 		return return_list
 
 	def _build_dict(self, line):
+		'''
+		Uses pre-established dictionary keys from __init__
+		to create dictionary. Only adds into the dictionary
+		the needed_fields.
+		'''
 		if len(line.split()) == 0:
 			return None
 		play_dict = {}
