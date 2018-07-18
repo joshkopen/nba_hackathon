@@ -3,7 +3,6 @@ from play_by_play_reader import PlayByPlayReader
 from game_lineup_reader import LineupReader
 
 
-
 def create_plus_minus_dict():
     play_by_play_reader = PlayByPlayReader()
     game_lineup_reader = LineupReader()
@@ -124,13 +123,17 @@ def create_plus_minus_dict():
         write_csv(game_id, plus_minus)
 
 def write_csv(game_id, plus_minus_dict):
-    with open("cameron_coders.csv", 'wb') as csvfile:
+    with open("cameron_coders.csv", 'a') as csvfile:
         writer = csv.writer(csvfile)
-        header = ["Game_id","Player","Plus/Minus"]
         writer.writerow(header)
         for player in plus_minus_dict.keys():
             plus_minus_score = plus_minus_dict[player]
             writer.writerow([game_id,player,plus_minus_score])
 
-            #LAST THING TO DO: should I make a plus minus updater function -- pass it dictionary, points, etc. and it will update
+with open("cameron_coders.csv", 'wb') as csvfile:
+        writer = csv.writer(csvfile)
+        header = ["Game_id","Player","Plus/Minus"]
+create_plus_minus_dict()
+
+#LAST THING TO DO: should I make a plus minus updater function -- pass it dictionary, points, etc. and it will update
                 
