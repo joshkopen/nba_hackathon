@@ -1,13 +1,16 @@
 #import statements
-import play_by_play_reader
-import game_lineup_reader
+from play_by_play_reader import PlayByPlayReader
+from game_lineup_reader import LineupReader
 
 
 
 def create_plus_minus_dict():
+    play_by_play_reader = PlayByPlayReader()
+    game_lineup_reader = LineupReader()
+
     for game in range(50):
         plus_minus = {}
-        #game_events = get_next_game() -- gives a list of dictionaries*
+        game_events = play_by_play_reader.get_next_game() -- gives a list of dictionaries*
         counter = 0
         while(counter <= len(game_events)):
             event = game_events[counter]
@@ -107,7 +110,7 @@ def create_plus_minus_dict():
 
             #start period -- *import module for function
             if event["Event_Msg_Type"] == 12:
-                #on_court = get_next_quarter()
+                on_court = game_lineup_reader.get_next_quarter()
 
                 #make sure all players on court are in plus minus dictionary
                 for team in on_court.keys():
