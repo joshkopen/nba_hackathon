@@ -10,7 +10,9 @@ def create_plus_minus_dict():
 
     for game in range(50):
         plus_minus = {}
-        game_events = play_by_play_reader.get_next_game() -- gives a list of dictionaries*
+        game_events = play_by_play_reader.get_next_game()
+        game_id = game_events[0]["Game_id"]
+
         counter = 0
         while(counter <= len(game_events)):
             event = game_events[counter]
@@ -117,8 +119,18 @@ def create_plus_minus_dict():
                     for player in on_court[team]:
                         if player not in plus_minus.keys():
                             plus_minus[player] = 0
-
+        
             counter += 1
+        write_csv(game_id, plus_minus)
+
+def write_csv(game_id, plus_minus_dict):
+    with open("cameron_coders.csv", 'wb') as csvfile:
+        writer = csv.writer(csvfile)
+        header = ["Game_id","Player","Plus/Minus"]
+        writer.writerow(header)
+        for player in plus_minus_dict.keys():
+            plus_minus_score = plus_minus_dict[player]
+            writer.writerow([game_id,player,plus_minus_score])
 
             #LAST THING TO DO: should I make a plus minus updater function -- pass it dictionary, points, etc. and it will update
                 
