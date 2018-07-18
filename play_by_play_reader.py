@@ -29,7 +29,10 @@ class PlayByPlayReader():
 			current_event = self._build_dict(self.file.readline())
 
 		self.from_last_run_event = current_event
-		return return_list
+		return sorted(return_list, key = self._dict_sort)
+
+	def _dict_sort(self, play_dict):
+		return (int(play_dict["Period"]), int(play_dict["PC_Time"]) * -1, int(play_dict["WC_Time"]), int(play_dict["Event_Num"]))
 
 	def _build_dict(self, line):
 		'''
