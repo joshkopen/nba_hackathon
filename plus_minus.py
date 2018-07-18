@@ -5,12 +5,20 @@ from csv_writer import CSVWriter
 from settings import num_of_games
 
 def get_team_for(on_court, player_id):
+    '''
+    Retrives the team of a given player
+    who performed an action
+    '''
     for team in on_court:
         if player_id in on_court[team]:
             return team
     raise Exception("Player {} not found on team".format(player_id))
 
 def swap_players_in(on_court, players_subbing_in, players_subbing_out):
+    '''
+    Takes the dictionary on_court and swaps
+    all players_subbing_out for players_subbing_in
+    '''
     for i in range(len(players_subbing_in)):
         team = get_team_for(on_court, players_subbing_out[i])
         on_court[team].remove(players_subbing_out[i])
@@ -18,6 +26,11 @@ def swap_players_in(on_court, players_subbing_in, players_subbing_out):
     return on_court
 
 def update_plus_minus(plus_minus, team_for, on_court, points):
+    '''
+    Updates all players in on_court
+    player entries in the plus minus dictionary
+    using points and team_for
+    '''
     for team in on_court.keys():
                     #updating plus minus for players on team that scored
                     if team == team_for:
@@ -38,6 +51,10 @@ def update_plus_minus(plus_minus, team_for, on_court, points):
     return plus_minus
 
 def create_plus_minus_dict():
+    '''
+    The main method responsible for the major
+    logic of the program
+    '''
     play_by_play_reader = PlayByPlayReader()
     game_lineup_reader = LineupReader()
     csv_writer = CSVWriter()
@@ -69,7 +86,7 @@ def create_plus_minus_dict():
                 players_subbing_in = []
                 time_of_sub = event["PC_Time"]
                 while(event["PC_Time"] == time_of_sub):
-                    if event["Event_Msg_Type"] in "8":
+                    if event["Event_Msg_Type"] == "8":
                         players_subbing_out.append(event["Person1"])
                         players_subbing_in.append(event["Person2"])
                     elif event["Event_Msg_Type"] == "3":
