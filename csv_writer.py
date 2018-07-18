@@ -17,8 +17,8 @@ class CSVWriter():
 		and a list of dictionaries with players_dict
 		which maps players to their +/-
 		'''
-		for player in player_dict:
-			self.file.write("{}, {}, {}\n".format(game_id, player, player_dict[player]))
+		for player in players_dict:
+			self.file.write("{}, {}, {}\n".format(game_id, player, players_dict[player]))
 
 	def close_file(self):
 		'''Safely closes the file being written to'''
