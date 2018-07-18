@@ -1,12 +1,12 @@
 #import statements
 from play_by_play_reader import PlayByPlayReader
 from game_lineup_reader import LineupReader
-
-
+from csv_writer import CSVWriter
 
 def create_plus_minus_dict():
     play_by_play_reader = PlayByPlayReader()
     game_lineup_reader = LineupReader()
+    csv_writer = CSVWriter()
 
     for game in range(50):
         plus_minus = {}
@@ -14,12 +14,12 @@ def create_plus_minus_dict():
         game_id = game_events[0]["Game_id"]
 
         counter = 0
-        while(counter <= len(game_events)):
+        while(counter < len(game_events)):
             event = game_events[counter]
             #handle each event type
             #made shot
-            if event["Event_Msg_Type"] == 1:
-                points = event["Option1"]
+            if event["Event_Msg_Type"] == "1":
+                points = int(event["Option1"])
                 team_for = event["Team_id"]
                 for team in on_court.keys():
                     #updating plus minus for players on team that scored
@@ -40,7 +40,7 @@ def create_plus_minus_dict():
                                 plus_minus[player] = points * -1
 
             #substitution
-            elif event["Event_Msg_Type"] in [8,11]:
+            elif event["Event_Msg_Type"] in ["8","11"]:
 
                 team = event["Team_id"]
                 old_player = event["Person1"]
@@ -56,7 +56,7 @@ def create_plus_minus_dict():
                 '''
                 time_of_sub = event["PC_Time"]
                 while(event["PC_Time"] == time_of_sub):
-                    if event["Option1"] == 1:
+                    if int(event["Option1"]) == 1:
                         points = 1
                         team_for = event["Team_id"]
                         for team in on_court.keys():
@@ -123,14 +123,16 @@ def create_plus_minus_dict():
             counter += 1
         write_csv(game_id, plus_minus)
 
-def write_csv(game_id, plus_minus_dict):
-    with open("cameron_coders.csv", 'wb') as csvfile:
-        writer = csv.writer(csvfile)
-        header = ["Game_id","Player","Plus/Minus"]
-        writer.writerow(header)
-        for player in plus_minus_dict.keys():
-            plus_minus_score = plus_minus_dict[player]
-            writer.writerow([game_id,player,plus_minus_score])
+
+
+# def write_csv(game_id, plus_minus_dict):
+#     with open("cameron_coders.csv", 'wb') as csvfile:
+#         writer = csv.writer(csvfile)
+#         header = ["Game_id","Player","Plus/Minus"]
+#         writer.writerow(header)
+#         for player in plus_minus_dict.keys():
+#             plus_minus_score = plus_minus_dict[player]
+#             writer.writerow([game_id,player,plus_minus_score])
 
             #LAST THING TO DO: should I make a plus minus updater function -- pass it dictionary, points, etc. and it will update
                 
